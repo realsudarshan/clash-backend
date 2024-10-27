@@ -1,16 +1,17 @@
 import nodemailer from "nodemailer"
-export const transporter = nodemailer.createTransport({
-  host: "sandbox.smtp.mailtrap.io",
-  port: 2525,
-  secure:false,
+import IORedis from "ioredis";
+ export  const transporter =nodemailer.createTransport({
+  service: 'gmail',
   auth: {
-    user: "35e165307054a4",
-    pass: "0723246c107f4a"
+    user: 'code63650@gmail.com',
+    pass: 'tzpa yxko qkdj vvle'
   }
 });
+
   export const Sendmail=async(to:string,subject:string,body:string)=>{
+
     console.log("preparing for sending")
-    console.log(to,subject,body)
+    console.log("The type of IORedis is",typeof(IORedis))
     
 
      const info= await transporter.sendMail({

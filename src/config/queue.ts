@@ -1,6 +1,7 @@
 import { ConnectionOptions, DefaultJobOptions } from "bullmq";
 import IORedis from "ioredis";
-export const redisConnection: ConnectionOptions = new IORedis({
+
+export const redisConnection: ConnectionOptions = new IORedis.default({
   host: '127.0.0.1', // or your Redis server IP
   port: 6379,        // default Redis port
   maxRetriesPerRequest:null

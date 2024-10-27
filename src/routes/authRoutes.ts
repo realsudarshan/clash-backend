@@ -7,13 +7,12 @@ import { ZodError } from "zod";
 import { emailQueue, emailQueueName } from "../jobs/EmailJob.js";
 import { checkDateHourDifference, formatError, generateRandomNum, renderEmailEjs } from "../helper.js";
 import logger from "../config/logger.js";
-import { Sendmail } from "../config/mail.js";
 
 const router = Router()
 //* login route
 router.post("/login", async (req: Request, res: Response):Promise<any> => {
     try {
-        const body = req.body;
+        const {body} = req;
         const payload = loginSchema.parse(body);
         //check user exist or not
         let user = await prisma.user.findUnique({
@@ -27,7 +26,8 @@ router.post("/login", async (req: Request, res: Response):Promise<any> => {
             return res.status(422).json({ error: "Email not verified.Please check your email and verify first" })
 
         }
-        const compare = await bcrypt.compare(payload.password, user.password);
+        const compare = await bcrypt.compare(payload.password,user.password);
+        console.log(user.password,payload.password,compare)
         if (!compare) {
             return res.status(422).json({ error: "Invalid creditentials" })
         }
@@ -41,7 +41,7 @@ router.post("/login", async (req: Request, res: Response):Promise<any> => {
             id: user.id,
             username: user.name,
             password: user.password,
-            token: 'Bearer ${token}'
+            token: `Bearer ${token}`
         }
         return res.json({
             message: "Logged in sucessfully",
@@ -116,9 +116,10 @@ router.post("/register",async(req:Request,res:Response):Promise<any>=>{
 });
 router.post('/forgetpassword',async (req:Request,res:Response):Promise<any>=>{
   try {
-    const {body}=req.body;
-    const payload=await forgetPasswordSchema.parse(body)
-    const{email}=payload;
+    const {body}=req;
+    const payload= forgetPasswordSchema.parse(body)
+    const {email}=payload;
+    console.log(email)
     let user=await prisma.user.findUnique({where:{email:email}})
     if(!user){
       return res.status(404).json({message:"User not found"})
@@ -136,14 +137,14 @@ router.post('/forgetpassword',async (req:Request,res:Response):Promise<any>=>{
         },
       });
       const url=`http://localhost:7000/reset-password?email=${email}&token=${token}`
-       const html = await renderEmailEjs("forget-password", {
+       const html = await renderEmailEjs("forgetpassword", {
         name: user.name,
         url: url,
       });
       await emailQueue.add(emailQueueName, {
         to: payload.email,
         subject: "Forgot Password",
-        html: html,
+     body:html,
       });
        return res.json({
         message: "Email sent successfully!! please check your email.",
@@ -151,7 +152,7 @@ router.post('/forgetpassword',async (req:Request,res:Response):Promise<any>=>{
     } catch (error) {
       if (error instanceof ZodError) {
         const errors = formatError(error);
-        return res.status(422).json({ message: "Invalid data", errors });
+        return res.status(422).json({ message: "Invalid data", error });
       }
        else {
         logger.error({ type: "Auth Error", body: error });
@@ -169,8 +170,7 @@ router.post(
   
   async (req: Request, res: Response):Promise<any> => {
     try {
-      const body = req.body;
-      const payload = resetPasswordSchema.parse(body);
+      const payload = resetPasswordSchema.parse({...req.query,...req.body});
       const user = await prisma.user.findUnique({
         select: {
           email: true,

@@ -1,5 +1,5 @@
 import IORedis from "ioredis";
-export const redisConnection = new IORedis({
+export const redisConnection = new IORedis.default({
     host: '127.0.0.1', // or your Redis server IP
     port: 6379, // default Redis port
     maxRetriesPerRequest: null
