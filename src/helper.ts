@@ -6,6 +6,7 @@ import { renderFile } from "ejs";
 import moment from "moment";
 import { supportedMimes } from "./config/filesystem.js";
 import { UploadedFile } from "express-fileupload";
+import fs from "fs"
 
 export const formatError=(error:ZodError):any=>{
     let errors:any={};
@@ -53,5 +54,12 @@ return errors;
       
         return imageName;
       };
+      export const removeImage = (imageName: string) => {
+        const path = process.cwd() + "/public/images/" + imageName;
+        if (fs.existsSync(path)) {
+          fs.unlinkSync(path);
+        }
+      };
+      
       
 

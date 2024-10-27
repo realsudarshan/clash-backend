@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { renderFile } from "ejs";
 import moment from "moment";
 import { supportedMimes } from "./config/filesystem.js";
+import fs from "fs";
 export const formatError = (error) => {
     let errors = {};
     error.errors?.map((issue) => {
@@ -49,4 +50,10 @@ export const uploadImage = (image) => {
             throw err;
     });
     return imageName;
+};
+export const removeImage = (imageName) => {
+    const path = process.cwd() + "/public/images/" + imageName;
+    if (fs.existsSync(path)) {
+        fs.unlinkSync(path);
+    }
 };
