@@ -6,6 +6,7 @@ export const emailQueue = new Queue(emailQueueName, {
     connection: redisConnection,
     defaultJobOptions: defaultQueueConfig,
 });
+console.log("The emal queue is", emailQueue);
 // * Workers
 export const handler = new Worker(emailQueueName, async (job) => {
     const data = job.data;

@@ -10,3 +10,4 @@
 {"level":"error","message":{"body":"{\"code\":\"ETIMEDOUT\",\"command\":\"CONN\"}","type":"Register Error"},"timestamp":"2024-10-14T09:05:41.862Z"}
 {"level":"error","message":{"body":"{\"code\":\"ETIMEDOUT\",\"command\":\"CONN\"}","type":"Register Error"},"timestamp":"2024-10-14T09:08:27.819Z"}
 {"level":"error","message":{"body":{"code":"ENOENT","errno":-2,"path":"/home/sudarshan/Documents/clash/server/dist/views/emails/forget-password.ejs","syscall":"open"},"type":"Auth Error"},"timestamp":"2024-10-25T16:25:20.616Z"}
+{"level":"error","message":{"body":"{\"name\":\"PrismaClientKnownRequestError\",\"code\":\"P2021\",\"clientVersion\":\"5.21.0-dev.6\",\"meta\":{\"modelName\":\"User\",\"table\":\"public.User\"}}","type":"Register Error"},"timestamp":"2025-03-08T05:18:26.413Z"}

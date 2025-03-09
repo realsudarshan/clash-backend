@@ -82,7 +82,7 @@ router.post("/register",async(req:Request,res:Response):Promise<any>=>{
       payload.password=await bcrypt.hash(password,salt);
       const id=generateRandomNum();
       const token=await bcrypt.hash(id,salt);
-      const url=`http:localhost:7000/verify/email/?email=${email}&token=${token}`
+      const url=`http://localhost:7000/verify/email/?email=${email}&token=${token}`
       console.log("Working till url")
       const html=await renderEmailEjs("verifymail",{name:username,url:url});
       await emailQueue.add(emailQueueName,{

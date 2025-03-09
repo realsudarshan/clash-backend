@@ -12,6 +12,7 @@ router.get("/verify/email", async (req, res) => {
             },
             where: { email: email },
         });
+        console.log(user);
         if (user) {
             // * Check both token
             if (token !== user.email_verify_token) {
